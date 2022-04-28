@@ -101,6 +101,9 @@ public class GalagaPanel extends JPanel implements KeyListener{
 			listlength = 0;
 			dead = 0;
 		}
+		
+		g.setFont(new Font("sansseriff", Font.BOLD, 25));
+		g.drawString("SCORE", 500, 325);
 	}
 
 
