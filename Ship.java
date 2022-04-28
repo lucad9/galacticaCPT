@@ -1,17 +1,12 @@
+public class Ship extends GameObject{
 
-public class Ship extends GameObject
-{
-
-	//ship velocity
-	int dx;
+	int dx; //ship velocity
 	
-	Ship()
-	{
+	Ship(){ // initializes the ship
 		attribute = "ship";
 	}
-	public void update()
-	{
-		x+=dx;
-	}
 
+	public void update(){ // collaborates with the GalagaPanel class for user input based on this
+		x+=dx; // when there's an update, dx is changed based on input (i.e. left arrow = -dx)
+	}
 }

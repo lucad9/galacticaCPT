@@ -1,7 +1,6 @@
 import java.util.*;
 
-public class Alien extends GameObject
-{
+public class Alien extends GameObject{
 	Random dice;
 	int cnt = 1;
 	int dx;
@@ -14,7 +13,7 @@ public class Alien extends GameObject
 		dice = new Random();
 		x = dice.nextInt(400);
 		y = dice.nextInt(250);
-		dx = dice.nextInt(20) + 10;
+		dx = dice.nextInt(20) + 10; // randomizes velocity
 		attribute = "alien";
 		bullet = new Bullet();
 		bullet.makeColorBlue();
@@ -26,7 +25,7 @@ public class Alien extends GameObject
 		if(cnt%2 != 1)
 		{
 			x += dx;
-			if(x > 500)
+			if(x > 625)
 				cnt++;
 		}
 		else

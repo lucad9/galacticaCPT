@@ -5,33 +5,28 @@ public class Seeker extends Alien
 	GameObject prey;
 	
 	
-	//Seeker, moves around in sine wave, shoots bullets that follow you
+	// seeker alien, moves around in sine wave, shoots bullets that follow you
 	
-	Seeker()
-	{
+	Seeker(){
 		x = dice.nextInt(400);
 		y = dice.nextInt(200);
-		attribute = "Seeker";
+		attribute = "seeker";
 		bullet.makeColorGreen();
 	}
 	
-	public void setPrey(GameObject o)
-	{
+	public void setPrey(GameObject o){
 		prey = o;
 	}
 	
-	public void update()
-	{		
-		if(cnt%2 != 1)
-		{
+	public void update(){
+		if(cnt%2 != 1){
 			x += dx;
-			y = 120+ (int) (150 *Math.cos(t));
+			y = 120+ (int) (150 *Math.sin(t));
 			t+= .2;
 			if(x > 500)
 				cnt++;
 		}
-		else
-		{
+		else{
 			x -= dx;
 			y = 120+ (int) (150 *Math.cos(t));
 			t+= .2;
@@ -41,37 +36,30 @@ public class Seeker extends Alien
 		
 		rand = dice.nextInt(2);
 		
-		if(alive)
-		{
-			if(rand == 0 && !shot)
-			{
+		if(alive){
+			if(rand == 0 && !shot){
 				bullet.x = x + width/2;
 				bullet.y = y + 5;
 				shot = true;
 			}
 			
-			if(shot)
-			{
+			if(shot){
 				bullet.y += 5;
-				if(prey.x < bullet.x)
-				{
+				if(prey.x < bullet.x){
 					bullet.x -= 4;
 				}
-				if(prey.x > bullet.x)
-				{
+				if(prey.x > bullet.x){
 					bullet.x += 4;
 				}
-				if(bullet.y >= 500)
-				{
+				if(bullet.y >= 500){
 					bullet.y = -5;
 					shot = false;
 				}
 			}
 		}
-		else
-		{
+
+		else{
 			bullet.y = -15;
 		}
-		
 	}
 }

@@ -18,12 +18,15 @@ public class Bullet extends GameObject {
 	public void update(){
 		y -= 30;
 	}
+
 	public void makeColorGreen(){
 		col = Color.GREEN;
 	}
+
 	public void makeColorBlue(){
 		col = Color.BLUE;
 	}
+
 	public void draw(Graphics g, Component c){
 		g.setColor(col);
 		g.fillOval(x, y, width, height);

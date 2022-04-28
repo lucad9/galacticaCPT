@@ -29,8 +29,8 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		//add a ship to the game
 		ship = new Ship();
 		ship.setPicture(playership);
-		ship.x = 200;
-		ship.y = 400;
+		ship.x = 317;
+		ship.y = 480;
 
 
 		// this one adds the purple aliens at the top
@@ -89,12 +89,12 @@ public class GalagaPanel extends JPanel implements KeyListener{
 
 		if(ship.alive == false) {
 			g.setFont(new Font("sansseriff", Font.BOLD, 32));
-			g.drawString("You died!", 150, 300);
+			g.drawString("You died!", 260, 325);
 		}
 
 		if(dead == listlength){
 			g.setFont(new Font("sansseriff", Font.BOLD, 32));
-			g.drawString("You won!", 150, 300);
+			g.drawString("You won!", 260, 325);
 		}
 
 		else{
@@ -155,8 +155,7 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		if(k.getKeyCode() == KeyEvent.VK_LEFT ||  k.getKeyCode() == KeyEvent.VK_RIGHT)
 			ship.dx = 0;
 	}
-
-	public void keyTyped(KeyEvent k)
+	public void keyTyped(KeyEvent k) // our code would not work without this. cannot figure out why
 	{
 	}
 }
