@@ -1,12 +1,13 @@
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.awt.event.*;
+	import javax.swing.*;
+	import java.awt.*;
+	import java.util.*;
+	import java.awt.event.*;
 
 public class GalagaPanel extends JPanel implements KeyListener{
 
 	//images
 	ImageIcon space, playership, purpleship, pred, bugship;
+	Image l1, l2, l3, l4;
 
 	//list of all objects in game
 	LinkedList<Alien> masterList;
@@ -15,8 +16,10 @@ public class GalagaPanel extends JPanel implements KeyListener{
 	Ship ship;
 	Bullet bullet;
 	
-	int dead, listlength;
-	
+	int dead, listlength, levelcount;
+
+	Toolkit t=Toolkit.getDefaultToolkit();
+
 	GalagaPanel(){
 		//load images, data, whatever
 		space = new ImageIcon("space.gif");
@@ -25,6 +28,11 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		pred = new ImageIcon("enemy_1.png");
 		bugship = new ImageIcon("enemy_2.png");
 
+		//load images for the level badges
+		l1 = t.getImage("badge_1.png");
+		l2 = t.getImage("badge_2.png");
+		l3 = t.getImage("badge_3.png");
+		l4 = t.getImage("badge_4.png");
 
 		//add a ship to the game
 		ship = new Ship();
@@ -87,12 +95,18 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		ship.draw(g, this);
 		bullet.draw(g, this);
 
+		// draw badge here
+		g.drawImage(l1, 10, 10, this);
+
+
 		if(ship.alive == false) {
 			g.setFont(new Font("sansseriff", Font.BOLD, 32));
 			g.drawString("You died!", 260, 325);
 		}
 
-		if(dead == listlength){
+		if(dead == listlength){ // must make new variable for this shit
+			g.drawImage(l2, 10, 10, this);
+
 			g.setFont(new Font("sansseriff", Font.BOLD, 32));
 			g.drawString("You won!", 260, 325);
 		}
@@ -101,9 +115,6 @@ public class GalagaPanel extends JPanel implements KeyListener{
 			listlength = 0;
 			dead = 0;
 		}
-		
-		g.setFont(new Font("sansseriff", Font.BOLD, 25));
-		g.drawString("SCORE", 500, 325);
 	}
 
 
@@ -139,9 +150,15 @@ public class GalagaPanel extends JPanel implements KeyListener{
 
 		if(k.getKeyCode() == KeyEvent.VK_RIGHT){
 			ship.dx = 10;
+			if(ship.x > 624){
+				ship.dx = -5;
+			}
 		}
 		if(k.getKeyCode() == KeyEvent.VK_LEFT){
 			ship.dx = -10;
+			if(ship.x < 1){
+				ship.dx = 5;
+			}
 		}
 
 		if(c == ' '){

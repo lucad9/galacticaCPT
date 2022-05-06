@@ -23,7 +23,7 @@ public class Seeker extends Alien
 			x += dx;
 			y = 120+ (int) (150 *Math.sin(t));
 			t+= .2;
-			if(x > 500)
+			if(x > 625)
 				cnt++;
 		}
 		else{

@@ -4,16 +4,15 @@ public class UpdateThread extends Thread{
 
 	GalagaPanel panel;
 
-	UpdateThread(GalagaPanel p){
+	UpdateThread(GalagaPanel p){ // creates a function to update the panel
 		panel = p;
 	}
 
-	public void run(){
-		while(true){
-			panel.update();
+	public void run(){ // runs
+		while(true){ // permanently runs
+			panel.update(); // updates the panel
 
-			//wait awhile
-			try{Thread.sleep(50);}
+			try{Thread.sleep(50);} // refreshes the while statement every 50 milliseconds
 			catch(Exception e){}
 		}
 	}
