@@ -49,7 +49,6 @@ public class GalagaPanel extends JPanel implements KeyListener{
 			masterList.add(a);
 		}
 
-
 		Predator p1 = new Predator();
 		p1.setPicture(pred);
 		p1.setPrey(ship);
@@ -72,12 +71,10 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		UpdateThread ut = new UpdateThread(this);
 		ut.start();
 		
-		
 		//stupid key listener stuff
 		addKeyListener(this);
 		setFocusable(true);
 	}
-
 
 	public void paintComponent(Graphics g) {
 		//clear screen
@@ -95,9 +92,16 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		ship.draw(g, this);
 		bullet.draw(g, this);
 
+		g.setFont(new Font("sansseriff", Font.BOLD, 32));
+		g.drawString("Score:", 535, 50);
+
+		//setting up the score
+		int score = dead;
+		String s = Integer.toString(score);
+		g.drawString(s, 645, 50);
+
 		// draw badge here
 		g.drawImage(l1, 10, 10, this);
-
 
 		if(ship.alive == false) {
 			g.setFont(new Font("sansseriff", Font.BOLD, 32));
@@ -115,8 +119,8 @@ public class GalagaPanel extends JPanel implements KeyListener{
 			listlength = 0;
 			dead = 0;
 		}
-	}
 
+	}
 
 	public void update(){
 		//update all objects in game

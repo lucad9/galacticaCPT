@@ -12,7 +12,7 @@ public class Bullet extends GameObject {
 		y = 0;
 		
 		attribute = "bullet";
-		col = Color.RED;
+		col = Color.WHITE;
 	}
 	
 	public void update(){

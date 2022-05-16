@@ -3,6 +3,8 @@ import java.awt.*;
 
 public class GameObject extends Rectangle {
 
+	int counter = 0;
+
 	ImageIcon picture;
 	boolean alive;
 	String attribute = "nothing";
@@ -20,11 +22,12 @@ public class GameObject extends Rectangle {
 	}
 
 	public void draw(Graphics g, Component c){
+
 		if(alive){
 			if(picture != null)
 				g.drawImage(picture.getImage(),x,y,width,height,c);
 			else{
-				g.setColor(Color.BLUE);
+				g.setColor(Color.WHITE);
 				g.fillRect(x,y,width,height);
 			}
 		}
@@ -37,6 +40,7 @@ public class GameObject extends Rectangle {
 			height = 0;
 			System.out.println(attribute + " killed");
 			alive = false;
+
 	}
 
 	public void update(){
