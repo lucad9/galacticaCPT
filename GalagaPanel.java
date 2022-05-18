@@ -7,7 +7,7 @@ public class GalagaPanel extends JPanel implements KeyListener{
 
 	//images
 	ImageIcon space, playership, purpleship, pred, bugship;
-	Image l1, l2, l3, l4;
+	Image l2, l3, l4, lM;
 
 	//list of all objects in game
 	LinkedList<Alien> masterList;
@@ -17,6 +17,9 @@ public class GalagaPanel extends JPanel implements KeyListener{
 	Bullet bullet;
 	
 	int dead, listlength, levelcount;
+	boolean spawned = false;
+	boolean spawned2 = false;
+	boolean spawned3 = false;
 
 	Toolkit t=Toolkit.getDefaultToolkit();
 
@@ -29,10 +32,11 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		bugship = new ImageIcon("enemy_2.png");
 
 		//load images for the level badges
-		l1 = t.getImage("badge_1.png");
+		lM = t.getImage("badge_1.png");
 		l2 = t.getImage("badge_2.png");
 		l3 = t.getImage("badge_3.png");
 		l4 = t.getImage("badge_4.png");
+
 
 		//add a ship to the game
 		ship = new Ship();
@@ -43,38 +47,30 @@ public class GalagaPanel extends JPanel implements KeyListener{
 
 		// this one adds the purple aliens at the top
 		masterList = new LinkedList<Alien>();
-		for(int i=0; i<3; i++){
+		for(int i=0; i<2; i++){
 			Alien a = new Alien();
 			a.setPicture(purpleship);
 			masterList.add(a);
 		}
+
 
 		Predator p1 = new Predator();
 		p1.setPicture(pred);
 		p1.setPrey(ship);
 		masterList.add(p1);
 
-
-		// this one adds the small funky looking bug alien
-		Seeker seek = new Seeker();
-		seek.setPicture(bugship);
-		seek.setPrey(ship);
-		masterList.add(seek);
-		
-		Predator p2 = new Predator();
-		p2.setPicture(pred);
-		p2.setPrey(ship);
-		masterList.add(p2);
 		
 		bullet = new Bullet();
 
 		UpdateThread ut = new UpdateThread(this);
 		ut.start();
 		
+		
 		//stupid key listener stuff
 		addKeyListener(this);
 		setFocusable(true);
 	}
+
 
 	public void paintComponent(Graphics g) {
 		//clear screen
@@ -92,35 +88,124 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		ship.draw(g, this);
 		bullet.draw(g, this);
 
+
+
+		// draw badge here
+		g.drawImage(lM, 10, 10, this);
+
 		g.setFont(new Font("sansseriff", Font.BOLD, 32));
 		g.drawString("Score:", 535, 50);
 
 		//setting up the score
 		int score = dead;
+		if(dead >= 25){
+			score = 25;
+		}
 		String s = Integer.toString(score);
 		g.drawString(s, 645, 50);
 
-		// draw badge here
-		g.drawImage(l1, 10, 10, this);
 
 		if(ship.alive == false) {
 			g.setFont(new Font("sansseriff", Font.BOLD, 32));
 			g.drawString("You died!", 260, 325);
 		}
 
-		if(dead == listlength){ // must make new variable for this shit
-			g.drawImage(l2, 10, 10, this);
+		levelcount = 1;
+		if(score == 3){
+			levelcount +=1;
+		}
 
+		if(levelcount == 2){
+			if (!this.spawned) {
+				for(int i=0;i<3;i++){
+					Alien a = new Alien();
+					a.setPicture(purpleship);
+					masterList.add(a);
+				}
+
+				//spawns the annoying bug one
+				Seeker seek = new Seeker();
+				seek.setPicture(bugship);
+				seek.setPrey(ship);
+				masterList.add(seek);
+
+				spawned = true;
+			}
+			lM = l2;
+		}
+
+		if(score == 7){
+			levelcount = 3;
+		}
+
+
+		if(levelcount == 3){
+			if (!this.spawned2) {
+				for(int i=0;i<4;i++){
+					Alien a = new Alien();
+					a.setPicture(purpleship);
+					masterList.add(a);
+				}
+
+				Seeker seek = new Seeker();
+				seek.setPicture(bugship);
+				seek.setPrey(ship);
+				masterList.add(seek);
+
+				for(int i=0;i<2;i++) {
+					Predator p1 = new Predator();
+					p1.setPicture(pred);
+					p1.setPrey(ship);
+					masterList.add(p1);
+				}
+
+				spawned2 = true;
+			}
+			lM = l3;
+		}
+
+		if(score == 14){
+			levelcount = 4;
+		}
+
+		if(levelcount == 4){
+			if (!this.spawned3) {
+				for(int i=0;i<6;i++){
+					Alien a = new Alien();
+					a.setPicture(purpleship);
+					masterList.add(a);
+				}
+
+				for(int i=0;i<2;i++) {
+					Seeker seek = new Seeker();
+					seek.setPicture(bugship);
+					seek.setPrey(ship);
+					masterList.add(seek);
+				}
+
+				for(int i=0;i<3;i++) {
+					Predator p1 = new Predator();
+					p1.setPicture(pred);
+					p1.setPrey(ship);
+					masterList.add(p1);
+				}
+
+				spawned3 = true;
+			}
+			lM = l4;
+		}
+
+		if(score >= 25){
 			g.setFont(new Font("sansseriff", Font.BOLD, 32));
-			g.drawString("You won!", 260, 325);
+			g.drawString("You won!",260,325);
 		}
 
 		else{
 			listlength = 0;
 			dead = 0;
 		}
-
 	}
+
 
 	public void update(){
 		//update all objects in game
