@@ -1,403 +1,254 @@
-package Galaga;
-
-import javax.swing.*;
+	import javax.swing.*;
 	import java.awt.*;
-import java.io.*;
-import java.util.*;
+	import java.util.*;
 	import java.awt.event.*;
-import java.io.File;
 
-import java.io.PrintWriter;
+public class GalagaPanel extends JPanel implements KeyListener{
+/* the "extends took a really long time to figure out, but from (extending) JPanel we are implements (using) KeyListener
+   once we learned about this, we used extends a couple more times in this file
+ */
 
-import java.io.FileInputStream;
+	// creating variables images
+	ImageIcon space, playership, purpleship, pred, bugship; // ships
+	Image l2, l3, l4, lM; // level badges
 
-import java.io.FileOutputStream;
+	LinkedList<Alien> masterList; // list of all aliens in game
 
-import java.io.FileNotFoundException;
+	Ship ship; // imports ship class
+	Bullet bullet; // imports bullet class
+	
+	int dead, listlength, levelcount; // creates variables to track actions
+	boolean spawned = false; // level 2 logic
+	boolean spawned2 = false; // level 3 logic
+	boolean spawned3 = false; // level 4 logic
 
+	Toolkit t=Toolkit.getDefaultToolkit(); // imports the default graphics toolkit
 
-public class GalagaPanel extends JPanel implements KeyListener {
+	GalagaPanel(){ // creates a class to be used in the main.java file
+		space = new ImageIcon("space.gif"); // sets the space variable to the background gif
+		playership = new ImageIcon("player.png"); // sets the player icon to the ship
+		purpleship = new ImageIcon("enemy_0.png"); // generic Alien sprite
+		pred = new ImageIcon("enemy_1.png"); // generic Predator sprite
+		bugship = new ImageIcon("enemy_2.png"); // generic Seeker sprite
 
-	//public static Object State;
-	//images
-	ImageIcon space, playership, purpleship, pred, bugship, splashScreen, MainMenu, HighScoreScreen;
-	Image l2, l3, l4, lM;
-
-	//list of all objects in game
-	LinkedList<Alien> masterList;
-
-	//ship
-	Ship ship;
-	Bullet bullet;
-
-	int dead, listlength, levelcount;
-	boolean spawned = false;
-	boolean spawned2 = false;
-	boolean spawned3 = false;
-
-	private int Highscore = 0;
-	private String saveDataPath;
-
-	private String fileName = "SaveData";
-
-	//Main Menu controler
-	int control = 0;
-	int score = 0;
-
-	public static enum STATE{
-		MENU, ENDGAME, TUTORIAL, LEVELONE, SCORES
-	};
-	public static STATE state = STATE.MENU;
-	private Menu menu;
-	Toolkit t = Toolkit.getDefaultToolkit();
-
-	GalagaPanel() {
-		//load images, data, whatever
-		space = new ImageIcon("space.gif");
-		MainMenu = new ImageIcon("MenuScreen.png");
-		HighScoreScreen = new ImageIcon("ScoreScreen.png");
-
-		playership = new ImageIcon("player.png");
-		purpleship = new ImageIcon("enemy_0.png");
-		pred = new ImageIcon("enemy_1.png");
-		bugship = new ImageIcon("enemy_2.png");
-
-		menu = new Menu();
-		this.addMouseListener(new MouseInput());
-		//load images for the level badges
-		lM = t.getImage("badge_1.png");
+		// load images for the level badges
+		lM = t.getImage("badge_1.png"); // level 1 badge that is able to be rewritten by the other badges`
 		l2 = t.getImage("badge_2.png");
 		l3 = t.getImage("badge_3.png");
 		l4 = t.getImage("badge_4.png");
 
+		ship = new Ship(); // new ship from the ship class
+		ship.setPicture(playership); // uses a method within the ship class to set the image to the ship
+		ship.x = 317; // sets ship pos to the middle of the screen
+		ship.y = 480; // sets ship pos to the bottom of the screen
 
-		//add a ship to the game
-		ship = new Ship();
-		//int con = Numbers.Numbers(1);
-		//System.out.print(con);
-		ship.setPicture(playership);
-		ship.x = 317;
-		ship.y = 480;
-		loadHighScore();
 
 		// this one adds the purple aliens at the top
-		masterList = new LinkedList<Alien>();
-		for (int i = 0; i < 2; i++) {
-			Alien a = new Alien();
-			a.setPicture(purpleship);
-			masterList.add(a);
+		masterList = new LinkedList<Alien>(); // makes a linkedlist that adds aliens, but also connects back to the masterlist
+		for(int i=0; i<2; i++){ // adds two aliens
+			Alien a = new Alien(); // alien class called
+			a.setPicture(purpleship); // sets the picture to the main alien sprite
+			masterList.add(a); // adds each alien to the masterclass
 		}
 
+		Predator p1 = new Predator(); // adds a predator
+		p1.setPicture(pred); // sets the picture to the predator sprite
+		p1.setPrey(ship); // makes the prey the ship, meaning its values will be equal to the player's
+		masterList.add(p1); // adds to masterlist
 
-		Predator p1 = new Predator();
-		p1.setPicture(pred);
-		p1.setPrey(ship);
-		masterList.add(p1);
+		bullet = new Bullet(); // imports bullets for the user
 
+		UpdateThread ut = new UpdateThread(this); // imports the updatethread which makes the graphics update
+		ut.start(); // uses the updatethread class to update the game's graphics
 
-		bullet = new Bullet();
-
-		UpdateThread ut = new UpdateThread(this);
-		ut.start();
-
-
-		//stupid key listener stuff
-		addKeyListener(this);
-		setFocusable(true);
+		addKeyListener(this); // imports the key listener
+		setFocusable(true); // jpanel method that makes the game focusable
 	}
 
 
-	public void paintComponent(Graphics g) {
-		//clear screen
-		if (state == STATE.MENU) {
-			g.drawImage(MainMenu.getImage(), 0, 0, getWidth(), getHeight(), this);
-			menu.render(g);
+	public void paintComponent(Graphics g) { // uses methods from graphics ; contains most of the code for the levels n stuff
+		g.drawImage(space.getImage(),0,0,getWidth(),getHeight(),this); // draws the gif across the screen
 
+		for(Alien go:masterList){ // for each alien in the masterlist
+			go.draw(g,this); // draw the alien at its coordinates
+			listlength++; // add value to listlength int
+			go.bullet.draw(g, this); // draw bullets
+			if(!go.alive) // if the alien dies
+				dead++; // add value to the death count
 		}
-		else if (state == STATE.TUTORIAL){
 
+		ship.draw(g, this); // draw the user ship
+		bullet.draw(g, this); // draw the user bullet
+
+
+		// draw badge here
+		g.drawImage(lM, 10, 10, this);
+
+		// setting up the score
+		g.setFont(new Font("sansseriff", Font.BOLD, 32)); // set font
+		g.drawString("Score:", 535, 50); // draw score string
+		int score = dead; // makes score = dead each time the game updates
+		if(dead >= 25){ // if there are 25 dead aliens (basically if the game has been won)
+			score = 25; // keeps score at 25 cuz if this isnt here then the score increases infinitely
 		}
-		else if (state == STATE.SCORES){
-				g.drawImage(HighScoreScreen.getImage(), 0, 0, getWidth(), getHeight(), this);
-				Graphics2D g2d = (Graphics2D) g;
-
-				Font fnt0 = new Font("arial", Font.BOLD, 50);
-				g.setFont(fnt0);
-				g.setColor(Color.white);
-				g.drawString("High Score: " + Highscore, 175, 350);
+		String s = Integer.toString(score); // changes the score to a string so it can be printed
+		g.drawString(s, 645, 50); // print the score next to the "score" string
 
 
+		if(ship.alive == false) { // when ship dies
+			g.setFont(new Font("sansseriff", Font.BOLD, 32)); // set font
+			g.drawString("You died!", 260, 325); // print on screen that you died
 		}
-			else if (state == STATE.LEVELONE) {
-				g.drawImage(space.getImage(), 0, 0, getWidth(), getHeight(), this);
 
-				//draw all objects in game
-				for (Alien go : masterList) {
-					go.draw(g, this);
-					listlength++;
-					go.bullet.draw(g, this);
-					if (!go.alive)
-						dead++;
+		levelcount = 1; // starts the level count value
+		if(score == 3){ // if 3 aliens are dead (level 1 beaten)
+			levelcount +=1; // next level
+		}
+
+		if(levelcount == 2){ // if user beat 3 aliens / cleared level 1
+			if (!this.spawned) { // the code would spawn an infinite amount of aliens if this failsafe wasn't here
+				for(int i=0;i<3;i++){ // spawns 3 aliens
+					Alien a = new Alien();
+					a.setPicture(purpleship);
+					masterList.add(a);
 				}
 
-				ship.draw(g, this);
-				bullet.draw(g, this);
+				Seeker seek = new Seeker(); // spawns a seeker that has bullets that chase the player
+				seek.setPicture(bugship);
+				seek.setPrey(ship); // sets the bullet prey to the ship's coordinates
+				masterList.add(seek);
 
-
-				// draw badge here
-				g.drawImage(lM, 10, 10, this);
-
-				g.setFont(new Font("sansseriff", Font.BOLD, 32));
-				g.drawString("Score:", 535, 50);
-
-				//setting up the score
-				score = dead;
-				if (dead >= 25) {
-					score = 25;
-				}
-				String s = Integer.toString(score);
-				g.drawString(s, 645, 50);
-
-
-				if (ship.alive == false) {
-					g.setFont(new Font("sansseriff", Font.BOLD, 32));
-					g.drawString("You died!", 260, 325);
-				}
-
-				levelcount = 1;
-				if (score == 3) {
-					levelcount += 1;
-				}
-
-				if (levelcount == 2) {
-					if (!this.spawned) {
-						for (int i = 0; i < 3; i++) {
-							Alien a = new Alien();
-							a.setPicture(purpleship);
-							masterList.add(a);
-						}
-
-						//spawns the annoying bug one
-						Seeker seek = new Seeker();
-						seek.setPicture(bugship);
-						seek.setPrey(ship);
-						masterList.add(seek);
-
-						spawned = true;
-					}
-					lM = l2;
-				}
-
-				if (score == 7) {
-					levelcount = 3;
-				}
-
-
-				if (levelcount == 3) {
-					if (!this.spawned2) {
-						for (int i = 0; i < 4; i++) {
-							Alien a = new Alien();
-							a.setPicture(purpleship);
-							masterList.add(a);
-						}
-
-						Seeker seek = new Seeker();
-						seek.setPicture(bugship);
-						seek.setPrey(ship);
-						masterList.add(seek);
-
-						for (int i = 0; i < 2; i++) {
-							Predator p1 = new Predator();
-							p1.setPicture(pred);
-							p1.setPrey(ship);
-							masterList.add(p1);
-						}
-
-						spawned2 = true;
-					}
-					lM = l3;
-				}
-
-				if (score == 14) {
-					levelcount = 4;
-				}
-
-				if (levelcount == 4) {
-					if (!this.spawned3) {
-						for (int i = 0; i < 6; i++) {
-							Alien a = new Alien();
-							a.setPicture(purpleship);
-							masterList.add(a);
-						}
-
-						for (int i = 0; i < 2; i++) {
-							Seeker seek = new Seeker();
-							seek.setPicture(bugship);
-							seek.setPrey(ship);
-							masterList.add(seek);
-						}
-
-						for (int i = 0; i < 3; i++) {
-							Predator p1 = new Predator();
-							p1.setPicture(pred);
-							p1.setPrey(ship);
-							masterList.add(p1);
-						}
-
-						spawned3 = true;
-					}
-					lM = l4;
-				}
-
-
-				// High Score Making
-				try{
-				saveDataPath = System.getProperty("user.home") + "Galaga Score";
+				spawned = true; // closes the failsafe
 			}
-				catch(Exception e){
-					e.printStackTrace();
+			lM = l2; // overwrites the level badge to level 2
+		}
+
+		if(score == 7){ // if the player beat level 2
+			levelcount = 3; // advance to level 3
+		}
+
+		if(levelcount == 3){ // if its level 3
+			if (!this.spawned2) { // new failsafe instead of overwriting the old one
+				for(int i=0;i<4;i++){ // spawns 4 purple ones
+					Alien a = new Alien();
+					a.setPicture(purpleship);
+					masterList.add(a);
 				}
 
+				Seeker seek = new Seeker(); // spawns a seeker
+				seek.setPicture(bugship);
+				seek.setPrey(ship);
+				masterList.add(seek);
 
-				if (score >= 25) {
-					g.setFont(new Font("sansseriff", Font.BOLD, 32));
-					g.drawString("You won!", 260, 325);
-				} else {
-					listlength = 0;
-					dead = 0;
+				for(int i=0;i<2;i++) { // spawns 2 predators
+					Predator p1 = new Predator();
+					p1.setPicture(pred);
+					p1.setPrey(ship);
+					masterList.add(p1);
 				}
+
+				spawned2 = true; // new failsafe is stopped
 			}
-
+			lM = l3; // level badge = level 3
 		}
 
-	private void createSaveData() {
-
-		try{
-			File file = new File(saveDataPath, fileName);
-
-			FileWriter output = new FileWriter(file);
-			BufferedWriter writer = new BufferedWriter(output);
-			writer.write(""+0);
-			writer.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
+		if(score == 14){ // if the player beats level 3
+			levelcount = 4; // start level 4
 		}
 
-	}
+		if(levelcount == 4){ // if its level 4
+			if (!this.spawned3) { // the next and final failsafe so a bunch of aliens don't spawn infinitely
+				for(int i=0;i<6;i++){ // spawns 6 (SIX!!!) of the purple aliens
+					Alien a = new Alien();
+					a.setPicture(purpleship);
+					masterList.add(a);
+				}
 
-	private void loadHighScore(){
+				for(int i=0;i<2;i++) { // spawns 2 seekers
+					Seeker seek = new Seeker();
+					seek.setPicture(bugship);
+					seek.setPrey(ship);
+					masterList.add(seek);
+				}
 
-		try{
-			File f = new File(saveDataPath, fileName);
-			if(!f.isFile()){
-				createSaveData(); // check for previous creation
+				for(int i=0;i<3;i++) { // spawns 3 predators
+					Predator p1 = new Predator();
+					p1.setPicture(pred);
+					p1.setPrey(ship);
+					masterList.add(p1);
+				}
+
+				spawned3 = true; // switches on the failsafe so it doesnt spawn infinitely again
 			}
-
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-			Highscore =  Integer.parseInt(reader.readLine());
-
-			reader.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
+			lM = l4; // level badge = level 4
 		}
 
+		if(score >= 25){ // if all the aliens are killed (25 aliens in the game)
+			g.setFont(new Font("sansseriff", Font.BOLD, 32));
+			g.drawString("You won!",260,325); // prints "you won!" in the middle of your screen
+		}
+
+		else{ // prevents the game from literally going haywire
+			listlength = 0; // keeps listlength at zero if an alien is killed (it'll increase infinitely otherwise)
+			dead = 0; // same as above, different variable
+		}
 	}
 
 
-
-	private void setHighScore(){
-		FileWriter output = null;
-		try{
-			File f = new File(saveDataPath, fileName);
-			output = new FileWriter(f);
-			BufferedWriter writer = new BufferedWriter(output);
-
-			if (score> Highscore){
-				writer.write(""+score);
+	public void update(){ // updates each frame of the game and checks each alien and the ship for change
+		for(Alien go : masterList){ // repeats continually for each alien in the list
+			go.update(); // updates the masterlist continually
+			if(bullet.intersects(go)){ // if a bullet hits an alien
+				go.kill(); // Kill it!
 			}
-			writer.close();
-
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-
-	}
-
-
-	public void update () {
-			//update all objects in game
-			for (Alien go : masterList) {
-				go.update();
-				if (bullet.intersects(go)) {
-					go.kill();
-				}
-
-				if (go.intersects(ship) && !go.attribute.equalsIgnoreCase("ship")) {
-					ship.kill();
-				}
-
-				if (go.bullet.intersects(ship)) {
-					ship.kill();
-				}
-
+			
+			if(go.intersects(ship) && !go.attribute.equalsIgnoreCase("ship")){ // if an alien hits the ship (predators specifically)
+				ship.kill(); // Kill it!
 			}
 
-			//check for bullet shot aliens
-
-			bullet.update();
-			ship.update();
-
-			repaint();
+			if(go.bullet.intersects(ship)){ // if an alien bullet from the masterlist hits the ship
+				ship.kill(); // Kill it!
+			}
 		}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-
+		bullet.update(); // updates the bullet and checks if it hit an alien
+		ship.update(); // updates the ship and checks if an alien bullet / alien has hit it
+		
+		repaint(); // repaints (refreshes the visuals of) the game
 	}
 
 	// checks the keyboard for input to move
-		public void keyPressed (KeyEvent k){
-			char c = k.getKeyChar();
-			char q = k.getKeyChar();
+	public void keyPressed(KeyEvent k) { // more keylistener things used for user input
+		char c = k.getKeyChar(); // used to check if the spacebar is pressed later
 
-
-
-			if (k.getKeyCode() == KeyEvent.VK_RIGHT) {
-				ship.dx = 10;
-				if (ship.x > 624) {
-					ship.dx = -5;
-				}
+		if(k.getKeyCode() == KeyEvent.VK_RIGHT){ // if the right arrow is pressed
+			ship.dx = 10; // move the ship right continually
+			if(ship.x > 624){ // if the ship reaches the right border
+				ship.dx = -5; // move the ship left
 			}
-			if (k.getKeyCode() == KeyEvent.VK_LEFT) {
-				ship.dx = -10;
-				if (ship.x < 1) {
-					ship.dx = 5;
-				}
+		}
+		if(k.getKeyCode() == KeyEvent.VK_LEFT){ // if the left arrow is pressed
+			ship.dx = -10; // move the ship left continually
+			if(ship.x < 1){ // if the ship reaches the left border
+				ship.dx = 5; // move the ship right
 			}
-
-			if (c == ' ') {
-				bullet.x = ship.x;
-				bullet.y = ship.y - 60;
-			}
-			
-			if(k.getKeyCode() == KeyEvent.VK_ESCAPE){
-				System.exit(0);
-				}
-			}
-
-			if (k.getKeyCode() == KeyEvent.VK_Q){
-				GalagaPanel.state = GalagaPanel.STATE.MENU;
-			}
-
-
 		}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
+		if(c == ' '){ // if the spacebar is pressed then it shoots a bullet
+			bullet.x = ship.x; // brings the ship bullet to the ship
+			bullet.y = ship.y - 60; // shoots the bullet forward
+		}
 
+		if(k.getKeyCode() == KeyEvent.VK_ESCAPE){ // quites the game if esc is pressed
+			System.exit(0);
+		}
 	}
 
+	public void keyReleased(KeyEvent k){ // used to "listen" for keys being released
+		if(k.getKeyCode() == KeyEvent.VK_LEFT ||  k.getKeyCode() == KeyEvent.VK_RIGHT) // if these movement keys are released
+			ship.dx = 0; // stop moving the ship
+	}
+	public void keyTyped(KeyEvent k) // listens for the keys being typed so they don't kill IntelliJ
+	{
+	}
 }
