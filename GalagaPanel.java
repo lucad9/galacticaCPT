@@ -382,6 +382,11 @@ public class GalagaPanel extends JPanel implements KeyListener {
 				bullet.x = ship.x;
 				bullet.y = ship.y - 60;
 			}
+			
+			if(k.getKeyCode() == KeyEvent.VK_ESCAPE){
+				System.exit(0);
+				}
+			}
 
 			if (k.getKeyCode() == KeyEvent.VK_Q){
 				GalagaPanel.state = GalagaPanel.STATE.MENU;
