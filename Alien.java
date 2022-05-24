@@ -1,3 +1,5 @@
+package Galaga;
+
 import java.util.*;
 
 public class Alien extends GameObject{

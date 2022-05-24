@@ -1,8 +1,11 @@
+package Galaga;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GameObject extends Rectangle {
 
+	public static int width;
 	ImageIcon picture;
 	boolean alive;
 	String attribute = "nothing";

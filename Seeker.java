@@ -1,3 +1,4 @@
+package Galaga;
 
 public class Seeker extends Alien
 {

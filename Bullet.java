@@ -1,3 +1,5 @@
+package Galaga;
+
 import java.awt.*;
 import javax.swing.*;
 

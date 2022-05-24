@@ -1,3 +1,5 @@
+package Galaga;
+
 public class Ship extends GameObject{
 
 	int dx; //ship velocity

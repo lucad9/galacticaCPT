@@ -1,3 +1,5 @@
+package Galaga;
+
 public class Predator extends Alien{
 
 	GameObject prey; // creates a variable to use in the rest of the code
