@@ -258,6 +258,7 @@
 
 				if (score == 3) { // if 3 aliens are dead (level 1 beaten)
 					levelcount += 1; // next level
+					 vibePlayer.stop();
 					truth = false;
 				}
 
@@ -265,7 +266,7 @@
 					
 					if(truth == false){
 					vibePlayer.play(audioFilePath3);
-						truth = true;
+					truth = true;
 					}
 					
 					if (!this.spawned) { // the code would spawn an infinite amount of aliens if this failsafe wasn't here
@@ -288,6 +289,7 @@
 				if (score == 7) { // if the player beat level 2
 					levelcount = 3; // advance to level 3
 					truth = false;
+					vibePlayer.stop();
 				}
 
 				if (levelcount == 3) { // if its level 3
@@ -323,6 +325,7 @@
 
 				if (score == 14) { // if the player beats level 3
 					levelcount = 4; // start level 4
+					vibePlayer.stop();
 					truth = false;
 				}
 
