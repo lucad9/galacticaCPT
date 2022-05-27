@@ -1,4 +1,4 @@
 TO DO STILL:
 - COMMENTING
 - Sound effects
-- Music Stoppping in between levels
+- Music Stopping in between levels
