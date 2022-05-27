@@ -232,7 +232,6 @@
 				}
 
 				levelcount = 1; // starts the level count value
-				truth = false;
 
 				if (levelcount == 1) {
 					
