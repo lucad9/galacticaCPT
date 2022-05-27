@@ -100,12 +100,18 @@ public class GalagaPanel extends JPanel implements KeyListener{
 			g.drawString("You died!", 260, 325); // print on screen that you died
 		}
 
+		musicPlayer player = new musicPlayer();
+		
 		levelcount = 1; // starts the level count value
+		
+		player.play("darudeSandstorm.wav");
+		
 		if(score == 3){ // if 3 aliens are dead (level 1 beaten)
 			levelcount +=1; // next level
 		}
 
 		if(levelcount == 2){ // if user beat 3 aliens / cleared level 1
+			player.play("fleetingFrozenHeart.wav");
 			if (!this.spawned) { // the code would spawn an infinite amount of aliens if this failsafe wasn't here
 				for(int i=0;i<3;i++){ // spawns 3 aliens
 					Alien a = new Alien();
@@ -128,6 +134,7 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		}
 
 		if(levelcount == 3){ // if its level 3
+			player.play("hereToYou.wav");
 			if (!this.spawned2) { // new failsafe instead of overwriting the old one
 				for(int i=0;i<4;i++){ // spawns 4 purple ones
 					Alien a = new Alien();
@@ -157,6 +164,7 @@ public class GalagaPanel extends JPanel implements KeyListener{
 		}
 
 		if(levelcount == 4){ // if its level 4
+			player.play("epicFinalLevelMusic.wav");
 			if (!this.spawned3) { // the next and final failsafe so a bunch of aliens don't spawn infinitely
 				for(int i=0;i<6;i++){ // spawns 6 (SIX!!!) of the purple aliens
 					Alien a = new Alien();
