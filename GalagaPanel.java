@@ -25,7 +25,6 @@
             clipPlayer shortPlayer = new clipPlayer();
 
             //File paths for background music.
-            String audioFilePath1 = "C:Music\\amogus.wav";
             String audioFilePath2 = "C:Music\\fleetingFrozenHeart.wav";
             String audioFilePath3 = "C:Music\\darudeSandstorm.wav";
             String audioFilePath4 = "C:Music\\hereToYou.wav";
