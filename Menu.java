@@ -1,28 +1,28 @@
-package Galaga;
 
-import Galaga.GameObject;
+
+
 
 import javax.swing.*;
 import java.awt.*;
 
+//whole code is only for shaping where the hit boxes of the menu are acccuratly
 
 public class Menu {
+    public Rectangle playButton = new Rectangle(48, 165, 205, 57);
+    public Rectangle ScoresButton = new Rectangle(48, 246, 205, 57);
+    public Rectangle TutorialButton = new Rectangle(48, 320, 320, 57);
 
-    public Rectangle playButton = new Rectangle(GameObject.width/2+150, 150, 100, 50);
-    public Rectangle ScoresButton = new Rectangle(GameObject.width/2+150, 250, 100, 50);
-    public Rectangle TutorialButton = new Rectangle(GameObject.width/2+170, 350, 100, 50);
-
-    public Rectangle ExitButton = new Rectangle(GameObject.width / 2 + 120, 450, 100, 50);
+    public Rectangle ExitButton = new Rectangle(48, 390, 353, 57);
 
     public void render (Graphics g){
 
         Graphics2D g2d = (Graphics2D) g;
-
+/*
         Font fnt0 = new Font("arial", Font.BOLD, 50);
         g.setFont(fnt0);
         g.setColor(Color.white);
         g.drawString("SPACE GAME", GameObject.width/2, 100);
-
+*/
         Font fnt1 = new Font("arial", Font.BOLD, 30);
         g.setFont(fnt1);
         g.drawString("play", playButton.x+19, playButton.y+30);

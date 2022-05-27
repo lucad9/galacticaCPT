@@ -1,23 +1,9 @@
-package Galaga;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class MouseInput implements MouseListener {
+public class MouseInput implements MouseListener {//listens for user mouse movements
 
-   // int Numberx = 0;
-    //int Number = Numbers(Numberx);
 
-  //  public static int Numbers(int N){
-    //    N = 0;
-  //      return N;
-  //  }
-
-int Number = 1;
-
-Numbers s1;
-//s1 = new  Numbers();
-//s1.SetNumbers(1, Number);
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -26,38 +12,38 @@ Numbers s1;
 
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) { //tracks the location x and y of the mouse
         int mx = e.getX();
         int my = e.getY();
 
         // playbutton
-        if (mx >= GameObject.width / 2 + 120 && mx <= GameObject.width / 2 + 220) {
-            if (my >= 150 && my <= 200) {
+        if (mx >= 48 && mx <= 253) { //dimensions of button
+            if (my >= 165 && my <= 222) {
                 //pressed playbutton
                 GalagaPanel.state = GalagaPanel.STATE.LEVELONE;            }
         }
 
-        // Score Button
-        if (mx >= GameObject.width / 2 + 120 && mx <= GameObject.width / 2 + 220) {
-            if (my >= 250 && my <= 300) {
-                //pressed score button
-                GalagaPanel.state = GalagaPanel.STATE.SCORES;
+        // exit button
+        if (mx >= 48 && mx <= 253) {//dimensions of button
+            if (my >= 246 && my <= 303) {
+                //pressed exit button
+                 System.exit(1);
             }
         }
 
         // Tutorial Button
-        if (mx >= GameObject.width / 2 + 120 && mx <= GameObject.width / 2 + 220) {
-            if (my >= 350 && my <= 400) {
+        if (mx >= 48 && mx <= 368) {//dimensions of button
+            if (my >= 320 && my <= 377) {
                 //pressed Tutorial button
                 GalagaPanel.state = GalagaPanel.STATE.TUTORIAL;
             }
         }
 
-        //Quit button
-        if (mx >= GameObject.width / 2 + 120 && mx <= GameObject.width / 2 + 220) {
-            if (my >= 450 && my <= 500) {
-                //pressed Quite button
-                System.exit(1);
+        //scores button
+        if (mx >= 48 && mx <= 401) {//dimensions of button
+            if (my >= 390 && my <= 447) {
+                //pressed scores button
+                GalagaPanel.state = GalagaPanel.STATE.SCORES;
             }
         }
 

@@ -10,16 +10,19 @@ public class Alien extends GameObject{
 	Bullet bullet;
 	
 	Alien(){
-		dice = new Random();
-		x = dice.nextInt(400); // randomizes spawn across the screen
-		y = dice.nextInt(250); // randomizes spawn at the top of the screen
-		dx = dice.nextInt(20) + 10; // randomizes velocity
-		attribute = "alien";
-		bullet = new Bullet(); // uses the bullet class to add a bullet to each alien
-		bullet.makeColorBlue();
-		bullet.y = -10; // places it offscreen so its not seen
-		shot = false;
-	}
+			dice = new Random();
+			x = dice.nextInt(400); // randomizes spawn across the screen
+			y = dice.nextInt(250); // randomizes spawn at the top of the screen
+			dx = dice.nextInt(20) + 10; // randomizes velocity
+			attribute = "alien";
+
+			bullet = new Bullet(); // uses the bullet class to add a bullet to each alien
+
+			bullet.makeColorBlue();
+			bullet.y = -10; // places it offscreen so its not seen
+			shot = false;
+		}
+
 
 	public void update(){		
 		if(cnt%2 != 1){ // while the alien has not hit the right side

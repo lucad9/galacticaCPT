@@ -1,45 +1,31 @@
-        import java.io.File;
-        import java.io.IOException;
-        import javax.sound.sampled.AudioFormat;
-        import javax.sound.sampled.AudioInputStream;
-        import javax.sound.sampled.AudioSystem;
-        import javax.sound.sampled.DataLine;
-        import javax.sound.sampled.LineUnavailableException;
-        import javax.sound.sampled.SourceDataLine;
-        import javax.sound.sampled.UnsupportedAudioFileException;
-
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 public class musicPlayer implements Runnable{
-    private String fileLocation = "null";
 
-    public musicPlayer() {
-    }
 
-    public void play(String name)
+    Thread t;
+
+    musicPlayer()
     {
-        fileLocation = name;
-        Thread t = new Thread(this);
-        t.start();
-    }
-
-    @Override
-    public void run()
-    {
-        while(true) {
-            playSound(fileLocation);
-        }
+        t = new Thread(this);
+        t.start(); // Starting the thread
     }
 
     // size of the byte buffer used to read/write the audio stream
     private static final int BUFFER_SIZE = 4096;
 
+    //Play a given audio file.
+    void play(String audioFilePath) {
 
-
-        //Play a given audio file.
-        void playSound(String fileName){
-
-            File audioFile = new File(fileName);
-            fileLocation = fileName;
-
+        File audioFile = new File(audioFilePath);
+        while (true) {
             try {
                 AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
 
@@ -76,4 +62,9 @@ public class musicPlayer implements Runnable{
                 ex.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void run() {
+    }
 }
