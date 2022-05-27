@@ -15,6 +15,25 @@
 		// creating variables images
 		ImageIcon space, playership, purpleship, pred, bugship, important, splashScreen, MainMenu, HighScoreScreen, TutorialScreen; // ships and screens
 		Image l2, l3, l4, lM; // level badges
+		
+		//Controld whether a new background music will play.
+		boolean truth = false;
+		
+            //Creates an object for background music from the musicPlayer Class and an object for playing
+            //sound clips from the Clip Player Class.
+            musicPlayer vibePlayer = new musicPlayer();
+            clipPlayer shortPlayer = new clipPlayer();
+
+            //File paths for background music.
+            String audioFilePath1 = "C:Music\\amogus.wav";
+            String audioFilePath2 = "C:Music\\fleetingFrozenHeart.wav";
+            String audioFilePath3 = "C:Music\\darudeSandstorm.wav";
+            String audioFilePath4 = "C:Music\\hereToYou.wav";
+            String audioFilePath5 = "C:Music\\epicFinalLevelMusic.wav";
+
+            //File paths for clips
+            String clipFilePath1 = "C:Clips\\starWarsBlasterSound.wav";
+            String clipFilePath2 = "C:Clips\\deathSound.wav";
 
 
 		LinkedList<Alien> masterList; // list of all aliens in game
@@ -212,11 +231,16 @@
 					g.drawString("You died! Press \"ESC\" and play again!", 50, 325); // print on screen that you died
 				}
 
-				musicPlayer player = new musicPlayer();
-
 				levelcount = 1; // starts the level count value
+				truth = false;
 
 				if (levelcount == 1) {
+					
+					if(truth == false){
+					vibePlayer.play(audioFilePath2);
+						truth = true;
+					}
+					
 					if (!this.spawnedx) {
 						for (int i = 0; i < 2; i++) { // adds two aliens once in levelone state
 							Alien a = new Alien(); // alien class called
@@ -235,9 +259,16 @@
 
 				if (score == 3) { // if 3 aliens are dead (level 1 beaten)
 					levelcount += 1; // next level
+					truth = false;
 				}
 
 				if (levelcount == 2) { // if user beat 3 aliens / cleared level 1
+					
+					if(truth == false){
+					vibePlayer.play(audioFilePath3);
+						truth = true;
+					}
+					
 					if (!this.spawned) { // the code would spawn an infinite amount of aliens if this failsafe wasn't here
 						for (int i = 0; i < 3; i++) { // spawns 3 aliens
 							Alien a = new Alien();
@@ -257,9 +288,16 @@
 
 				if (score == 7) { // if the player beat level 2
 					levelcount = 3; // advance to level 3
+					truth = false;
 				}
 
 				if (levelcount == 3) { // if its level 3
+					
+					if(truth == false){
+					vibePlayer.play(audioFilePath4);
+					truth = true;
+					}
+					
 					if (!this.spawned2) { // new failsafe instead of overwriting the old one
 						for (int i = 0; i < 4; i++) { // spawns 4 purple ones
 							Alien a = new Alien();
@@ -286,9 +324,16 @@
 
 				if (score == 14) { // if the player beats level 3
 					levelcount = 4; // start level 4
+					truth = false;
 				}
 
 				if (levelcount == 4) { // if its level 4
+					
+					if(truth == false){
+					vibePlayer.play(audioFilePath5);
+						truth = true;
+					}
+					
 					if (!this.spawned3) { // the next and final failsafe so a bunch of aliens don't spawn infinitely
 						for (int i = 0; i < 6; i++) { // spawns 6 (SIX!!!) of the purple aliens
 							Alien a = new Alien();
