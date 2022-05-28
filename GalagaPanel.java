@@ -184,9 +184,11 @@
 				if (AliveControler == 2){
 					ship.draw(g, this); // draw the user ship
 					bullet.draw(g, this); // draw the user bullet
+					shortPlayer.play(clipFilePath1);
 				}
 				ship.draw(g, this); // draw the user ship
 				bullet.draw(g, this); // draw the user bullet
+				shortPlayer.play(clipFilePath1);
 
 
 				// draw badge here
@@ -365,6 +367,7 @@
 				if (score >= 25) { // if all the aliens are killed (25 aliens in the game)
 					g.setFont(new Font("sansseriff", Font.BOLD, 32));
 					g.drawString("You won!", 260, 325); // prints "you won!" in the middle of your screen
+					shortPlayer.play(clipFilePath2);
 				} else { // prevents the game from literally going haywire
 					listlength = 0; // keeps listlength at zero if an alien is killed (it'll increase infinitely otherwise)
 					dead = 0; // same as above, different variable
